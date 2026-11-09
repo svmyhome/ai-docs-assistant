@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=sqlite:///./vector_db.db
+    volumes:
+      - ./logs:/app/logs
+      - ./docs:/app/docs
+    restart: unless-stopped
+
+  vector-db:
+    image: mistralai/mistral-chat-lite-instruct-2409:llama-cpp-f16
+    volumes:
+      - ./vector_db:/data
+
+volumes:
+  vector-db:
+    external: false
